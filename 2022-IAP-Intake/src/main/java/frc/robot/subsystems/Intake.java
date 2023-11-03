@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
+//importing libraries
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -14,8 +14,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-public class Intake extends SubsystemBase {
 
+public class Intake extends SubsystemBase {
+//creating varaibles and set them with values 
 private double flywheelTolerance = 0.05; // Tolerance of PID controller
 private boolean override = false; // Helps us switch from manual to auto
 private Timer overrideTimer = new Timer(); // We want a toggle button of some sorts
@@ -31,17 +32,20 @@ private SimpleMotorFeedforward intakeFlyWheelFF = new  SimpleMotorFeedforward(Co
 
 
   public Intake() {
+    //reset to make the wheel run in the same direction 
     intakeFlyWheel.configFactoryDefault();
     intakeFlyWheel.setInverted(true); 
     intakeFlyWheel.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
 
-   
     intakeFlyWheelPID.setTolerance(flywheelTolerance);
 
+    //start and reset the timer 
     overrideTimer.start(); // Start timer
     overrideTimer.reset(); // Reset timer
 
   }
+  
+  //Return all the code (to make it work) that we have created in the above code 
   public void setFlywheelPower(double speed) {
     intakeFlyWheel.set(speed);
     }
@@ -71,7 +75,6 @@ private SimpleMotorFeedforward intakeFlyWheelFF = new  SimpleMotorFeedforward(Co
         }
         public double getFlywheelCurrent() {
         return (intakeFlyWheel.getStatorCurrent()/2.0);
-        
         }
        
         public void resetFlywheelEncoders() {
@@ -81,7 +84,8 @@ private SimpleMotorFeedforward intakeFlyWheelFF = new  SimpleMotorFeedforward(Co
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+  // This method will be called once per scheduler run
+ //Prints out different value that you choose 
 SmartDashboard.putNumber("Average RPM", getAverageRPM());
 SmartDashboard.putNumber("Average Current", getFlywheelCurrent());
 SmartDashboard.putNumber("Left Flywheel RPM", getLeftRPM());
@@ -90,6 +94,8 @@ SmartDashboard.putNumber("Right Flywheel RPM", getRightRPM());
 SmartDashboard.putNumber("Right Flywheel Power", getRightFlywheelPower());
 SmartDashboard.putNumber("Intake Flywheel Current", getCurrent());
 
+//This code help the robot to move
+//Using if-else-elseif staement to know how far and how fast of the robot's moving
 if (RobotContainer.getJoy1().getRawButton(2) && overrideTimer.get() >=  overrideTime) {
   override = !override;
   overrideTimer.reset();
